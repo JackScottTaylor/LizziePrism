@@ -19,7 +19,7 @@ def make_figure(filepath: str, title: str = '', xmin: Optional[float] = None,
        xlabel: str = 'Volume (mL)', ylabel: str = 'mAU (A280)'):
     mls, maus = data_from_csv_file(filepath)
     fig, ax = plt.subplots()
-    if title: fig.suptitle(title, pad=25)
+    if title: plt.title(title, pad=25)
     ax.plot(mls, maus, linewidth=2, color=color)
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
