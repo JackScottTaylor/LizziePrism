@@ -23,6 +23,7 @@ def extract_masses_intensities(filepath: str):
             if line.strip() == '': continue
             m, i = [float(x) for x in line.split()]
             masses.append(m); intensities.append(i)
+    return masses, intensities
 
 def make_figure(filepath: str, title: str = '', xmin: Optional[float] = 500,
        xmax: Optional[float] = None, color:str = 'red',
