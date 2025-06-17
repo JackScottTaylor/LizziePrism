@@ -2,6 +2,7 @@ from custom_plt import plt
 import numpy as np
 from typing import Optional
 import argparse
+import math
 
 plt.rcParams['font.family'] = 'Arial'
 plt.rcParams['mathtext.fontset'] = 'custom'
@@ -25,6 +26,14 @@ def extract_masses_intensities(filepath: str):
             masses.append(m); intensities.append(i)
     return masses, intensities
 
+def intmax_ymax(intensities):
+    max_y = max(intensities)
+    power = 0
+    while max_y / (10 ** power) > 1: power += 1
+    intmax = math.ceil(max_y / (10 ** power))
+    return intmax, intmax * (10 ** power)
+
+
 def make_figure(filepath: str, title: str = '', xmin: Optional[float] = 500,
        xmax: Optional[float] = None, color:str = 'red',
        ymin: float = 0, ymax: Optional[float] = None,
@@ -32,6 +41,8 @@ def make_figure(filepath: str, title: str = '', xmin: Optional[float] = 500,
     masses, intensities = extract_masses_intensities(filepath)
     fig, ax = plt.subplots()
     if title: plt.title(title, pad=25)
+    if not ymax:
+        intmax, ymax = intmax_ymax(intensities)
     ax.plot(masses, intensities, linewidth=2, color=color)
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
