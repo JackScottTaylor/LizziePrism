@@ -43,6 +43,7 @@ def make_figure(filepath: str, title: str = '', xmin: Optional[float] = 500,
     if title: plt.title(title, pad=25)
     if not ymax:
         intmax, ymax = intmax_ymax(intensities)
+        ax.set_yticks(np.arange(0, ymax+0.5, ymax/intmax))
     ax.plot(masses, intensities, linewidth=2, color=color)
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
