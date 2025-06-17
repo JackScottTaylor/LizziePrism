@@ -18,7 +18,7 @@ def latex_sci_formatter(y, _):
 
 def extract_masses_intensities(filepath: str):
     masses, intensities = [], []
-    with open('filepath', 'r') as f:
+    with open(filepath, 'r') as f:
         for line in f.readlines():
             if line.strip() == '': continue
             m, i = [float(x) for x in line.split()]
