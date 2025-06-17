@@ -15,13 +15,16 @@ def data_from_csv_file(filepath: str):
 
 def make_figure(filepath: str, title: str = '', xmin: Optional[float] = None,
        xmax: Optional[float] = None, color:str = 'black',
-       ymin: float = 0, ymax: Optional[float] = None):
+       ymin: float = 0, ymax: Optional[float] = None,
+       xlabel: str = 'Volume (mL)', ylabel: str = 'mAU (A280)'):
     mls, maus = data_from_csv_file(filepath)
-    if title: plt.title(title, pad=25)
+    if title: fig.suptitle(title, pad=25)
     fig, ax = plt.subplots()
     ax.plot(mls, maus, linewidth=2, color=color)
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
     plt.show()
 
 if __name__ == '__main__':
@@ -33,11 +36,11 @@ if __name__ == '__main__':
     parser.add_argument('--color', type=str, default='black')
     parser.add_argument('--ymin', type=float, default=0)
     parser.add_argument('--ymax', type=float, default=None)
+    parser.add_argument('--xlabel', type=str, default='Volume (mL)')
+    parser.add_argument('--ylabel', type=str, default='mAU (A280)')
     args = parser.parse_args()
     make_figure(
         args.filepath, title=args.title, xmin=args.xmin,
         xmax=args.xmax, color=args.color, ymin=args.ymin,
-        ymax=args.ymax
+        ymax=args.ymax, xlabel=args.xlabel, ylabel=args.ylabel
     )
-
-make_figure('/Users/jack/Downloads/SEC N40C-PDL1 190924 real run 001.csv')
