@@ -30,8 +30,8 @@ def intmax_ymax(intensities):
     max_y = max(intensities)
     power = 0
     while max_y / (10 ** power) > 1: power += 1
-    intmax = math.ceil(max_y / (10 ** power))
-    return intmax, intmax * (10 ** power)
+    intmax = math.ceil(max_y / (10 ** (power-1)))
+    return intmax, intmax * (10 ** (power-1))
 
 
 def make_figure(filepath: str, title: str = '', xmin: Optional[float] = 500,
