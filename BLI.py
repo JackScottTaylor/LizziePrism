@@ -84,10 +84,31 @@ def make_figure(file1: str, file2: str, label1: str = '', label2: str = '',
               prop=dict(weight='normal'),)
     
     ax.spines['bottom'].set_position('zero')
+    plt.show()
 
 
-
-file1 = '/Users/jack/Documents/GitHub/LizziePrism/t1A1Results.txt'
-file2 = '/Users/jack/Documents/GitHub/LizziePrism/t1C1Results.txt'
-make_figure(file1, file2, label1='Unmodified', label2='N-benzylmaleimide Conjugate', title=r'IL-2R$\beta \gamma$: N40C Modified vs Unmodified', xmax=400)
-plt.show()
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file1', type=str)
+    parser.add_argument('file2', type=str)
+    parser.add_argument('--label1', type=str, default='')
+    parser.add_argument('--label2', type=str, default='')
+    parser.add_argument('--color1', type=int, default=0)
+    parser.add_argument('--color2', type=int, default=1)
+    parser.add_argument('--zero_time', type=bool, default=True)
+    parser.add_argument('--title', type=str, default='')
+    parser.add_argument('--xmin', type=float, default=0)
+    parser.add_argument('--xmax', type=float, default=None)
+    parser.add_argument('--ymin', type=float, default=None)
+    parser.add_argument('--ymax', type=float, default=None)
+    parser.add_argument('--fit1', type=bool, default=False)
+    parser.add_argument('--fit2', type=bool, default=False)
+    args = parser.parse_args()
+    
+    make_figure(
+        args.file1, args.file2, label1=args.label1, label2=args.label2, 
+        color1=args.color1, color2=args.color2, zero_time=args.zero_time,
+        title=args.title, xmin=args.xmin, xmax=args.xmax,
+        ymin=args.ymin, ymax=args.ymax,
+        fit1=args.fit1, fit2=args.fit2
+    )
