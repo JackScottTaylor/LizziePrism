@@ -1,10 +1,10 @@
 from custom_plt import plt
 import numpy as np
 import argparse
-from typing import Optional
+from typing import Optional, List
 from math import floor, ceil
 
-colors = [
+color_palette = [
     '#D81B60',
     '#1E88E5',
     '#FFC107',
@@ -43,26 +43,24 @@ def yticks(ymin, ymax):
     return np.arange(ytick_min, ytick_max+0.5*(10**order), 10**order)
 
 
-def make_figure(file1: str, file2: str, label1: str = '', label2: str = '',
-                color1: int = 0, color2: int = 1, zero_time: bool = True,
+def make_figure(files: List[str] = [], labels: List[str] = [''],
+                colors: List[str] = [''], zero_time: bool = True,
                 title: str = '', xmin: float = 0, xmax: Optional[float] = None,
                 ymin: Optional[float] = None, ymax: Optional[float] = None,
-                fit1: bool = False, fit2: bool = False):
+                fits = False):
     
     fig, ax = plt.subplots()
-    label1 = label1.replace(' ', '\n')
-    label2 = label2.replace(' ', '\n')
-    
-    t, d, f = extract_data(file1, zero_time=zero_time)
-    ax.plot(t, d, color=colors[color1], linewidth=2, label=label1)
-    if fit1:
-        plt.plot(t, f, color=colors[color1], linewidth=2, linestyle='--',
-                 label=label1+' Fit')
-    t, d, f = extract_data(file2, zero_time=zero_time)
-    ax.plot(t, d, color=colors[color2], linewidth=2, label=label2)
-    if fit2:
-        plt.plot(t, f, color=colors[color2], linewidth=2, linestyle='--',
-                 label=label2+' Fit')
+    labels = [l.replace(' ', '\n') for l in labels]
+
+    if labels == ['']: labels = [''] * len(files)
+    if colors == ['']: colors = color_palette
+
+    for file, label, color in zip(files, labels, colors):
+        t, d, f = extract_data(file, zero_time=zero_time)
+        ax.plot(t, d, color=color, linewidth=2, label=label)
+        if fits:
+            plt.plot(t, f, color=color, linewidth=2, linestyle='--',
+                    label=label+' Fit')
         
     ax.set_xlabel('Time (sec)')
     ax.set_ylabel('nm')
@@ -89,26 +87,22 @@ def make_figure(file1: str, file2: str, label1: str = '', label2: str = '',
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('file1', type=str)
-    parser.add_argument('file2', type=str)
-    parser.add_argument('--label1', type=str, default='')
-    parser.add_argument('--label2', type=str, default='')
-    parser.add_argument('--color1', type=int, default=0)
-    parser.add_argument('--color2', type=int, default=1)
+    parser.add_argument('files', nargs='+', type=str)
+    parser.add_argument('--labels', type=str, nargs='*', default=[''])
+    parser.add_argument('--colors', type=str, nargs='*', default=[''])
     parser.add_argument('--zero_time', type=bool, default=True)
     parser.add_argument('--title', type=str, default='')
     parser.add_argument('--xmin', type=float, default=0)
     parser.add_argument('--xmax', type=float, default=None)
     parser.add_argument('--ymin', type=float, default=None)
     parser.add_argument('--ymax', type=float, default=None)
-    parser.add_argument('--fit1', type=bool, default=False)
-    parser.add_argument('--fit2', type=bool, default=False)
+    parser.add_argument('--fits', type=bool, default=False)
     args = parser.parse_args()
     
     make_figure(
-        args.file1, args.file2, label1=args.label1, label2=args.label2, 
-        color1=args.color1, color2=args.color2, zero_time=args.zero_time,
+        files=args.files, labels=args.labels, 
+        colors=args.colors, zero_time=args.zero_time,
         title=args.title, xmin=args.xmin, xmax=args.xmax,
         ymin=args.ymin, ymax=args.ymax,
-        fit1=args.fit1, fit2=args.fit2
+        fits=args.fits
     )
