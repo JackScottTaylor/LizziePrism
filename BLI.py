@@ -79,7 +79,9 @@ def make_figure(files: List[str] = [], labels: List[str] = [''],
     ax.minorticks_off()
 
     ax.legend(frameon=False,
-              prop=dict(weight='normal'),)
+              prop=dict(weight='normal'),
+              loc='upper left',
+              bbox_to_anchor=(1.0, 0.95))
     
     ax.spines['bottom'].set_position('zero')
     plt.show()
