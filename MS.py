@@ -4,7 +4,7 @@ from matplotlib.ticker import MaxNLocator
 import argparse
 import sys
 
-from custom_plt import plt
+from custom_plt import plt, fig_h, fig_w
 
 def data_from_txt_file(filepath: str) -> List[np.ndarray]:
     '''
@@ -36,7 +36,8 @@ def normalise_intensities(intensities: np.ndarray) -> np.ndarray:
 def make_figure(filepath: str, title: str = '', xmin: Optional[float] = None,
        xmax: Optional[float] = None, color:str = 'red',
        ymin: float = 0, ymax: float = 100,
-       xticks = 3, yticks=2, npeaks: int = 1):
+       xticks = 3, yticks=2, npeaks: int = 1, yaxis: str = 'on',
+       fig_width: float = 1.0):
     m, i = data_from_txt_file(filepath)
     i = normalise_intensities(i)
 
@@ -58,6 +59,12 @@ def make_figure(filepath: str, title: str = '', xmin: Optional[float] = None,
     ax = plt.gca()
     ax.xaxis.set_major_locator(MaxNLocator(nbins=xticks))
     ax.yaxis.set_major_locator(MaxNLocator(nbins=yticks))
+    fig = plt.gcf()
+    fig.set_size_inches(fig_width*fig_w, fig_h)
+    print(yaxis)
+    if yaxis == 'off':
+        ax.axes.get_yaxis().set_visible(False)
+        ax.spines['left'].set_visible(False)
     plt.show()
 
 if __name__ == '__main__':
@@ -72,10 +79,13 @@ if __name__ == '__main__':
     parser.add_argument('--yticks', type=float, default=2)
     parser.add_argument('--xticks', type=float, default=3)
     parser.add_argument('--npeaks', type=int, default=1)
+    parser.add_argument('--yaxis', type=str, default='on')
+    parser.add_argument('--width', type=float, default=1.0)
     args = parser.parse_args()
+    print(args.yaxis)
     make_figure(
         args.filepath, title=args.title, xmin=args.xmin,
         xmax=args.xmax, color=args.color, ymin=args.ymin,
         ymax=args.ymax, xticks=args.xticks, yticks=args.yticks,
-        npeaks=args.npeaks
+        npeaks=args.npeaks, yaxis=args.yaxis, fig_width=args.width
     )
